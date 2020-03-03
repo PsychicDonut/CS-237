@@ -233,8 +233,7 @@ by zero.
 #+results:
 : 2925
 
-** DONE RHB
-   CLOSED: [2020-02-06 Thu 16:40]
+** TODO RHB
 #+begin_note
   How many different sequences can be formed using /either/ two /or/ three
   letters (A-Z) followed by /either/ two /or/ three digits (0-9)?
