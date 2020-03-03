@@ -20,7 +20,8 @@
 :END:
 * Exercises
   Exercise, to be precise.
-** TODO GYN
+** DONE GYN
+   CLOSED: [2020-03-03 Tue 09:05]
   Help Abu and Ila out. This version of =mod-expt= gets a /little/ better
   mileage than their simplistic one. It keeps the numbers smaller by reducing
   each partial exponentiation by modding it once every iteration instead of once,
@@ -37,11 +38,22 @@
   - Hint :: Reread the interchange between Til, Abu and Ila in PQS.
 :END:
 #+begin_info
-  Your answer goes here.
+If you look at the results at every iteration it will be the next power
+
+
+
 #+end_info
+#+begin_src elisp
+(mod (expt 2 3) 1)
+#+end_src
+
+#+results:
+: 0
+
 * Problems
   Problem, to be precise.
-** TODO XGG
+** DONE XGG
+   CLOSED: [2020-03-03 Tue 09:05]
   Experiment with RSA using the following code. You will need a better modular
   exponentiation function than =mod-expt= or perhaps even =a-better-mod-expt=.
   Implement the =pow-mod= function to be this better version. Note the
@@ -49,6 +61,14 @@
   /decoding/.
 
   How \ldquo{}big\rdquo a message can you successfully round-trip?
+
+#+begin_src elisp :results silent
+(defun pow-mod (base power modulus)
+   (loop with result = 1
+      for n from 1 to power
+      do (setq result (mod (* result base) modulus))
+      finally return result))
+#+end_src
 
 #+begin_src elisp :results silent
   (defun rsa-encrypt (message n e &optional encoder)
@@ -71,6 +91,39 @@
   working knowledge of /symbol property lists/ to play with /this/ test code:
 
 #+begin_src elisp :results silent
+  (defun from-base-27 (input)
+    (let* ((x (reverse (number-sequence (length input) 0 -1)))
+           (y (mapcar (lambda (x) (- x ?@)) (string-to-list input))))
+      (apply '+ (mapcar* (lambda (e n) (* n (expt 27 e))) x y))))
+
+  (defun rec-div (input)
+    (if (zerop input) nil
+    (append (list (mod input 27)) (rec-div (/ input 27)))))
+
+
+  (defun to-base-27 (input)
+    (concat (mapcar (lambda (x) (+ x ?@)) (rec-div input))))
+#+end_src
+#+begin_src elisp
+(from-base-27 "AA")
+#+end_src
+
+#+results:
+: 28
+
+#+begin_src elisp :results silent
+(defun set-rsa-players (n e d)
+   (put 'rsa-players :n n)
+   (put 'rsa-players :e e)
+   (put 'rsa-players :d d)
+)
+#+end_src
+
+#+begin_src elisp :results silent
+(set-rsa-players 52337 65537 19997)
+#+end_src
+
+#+begin_src elisp :results silent
   (defun test-rsa (message-with-spaces)
     (let* ((message (mapconcat 'identity
                                (split-string message-with-spaces " ") "@"))
@@ -83,10 +136,12 @@
              (mapconcat 'identity (split-string decrypted "@") " "))
             (success (string= message-with-spaces
                               decrypted-message-with-spaces)))
-       (princ (format (concat "\"%s\"\nwas encoded and encrypted as\n%s\n"
-                              "then decrypted and decoded as\n\"%s\"\n")
+       (princ (format (concat "\"%s\"\nwas encoded as %s and encrypted as\n%s\n"
+                              "then decrypted as %s and decoded as\n\"%s\"\n")
                       message-with-spaces
+                      (from-base-27 message)
                       encrypted
+                      (rsa-decrypt encrypted n d)
                       decrypted-message-with-spaces))
        (princ (if success "" "un"))
        (princ "successfully.\n")
@@ -95,9 +150,50 @@
 :HINT:
   - Hint :: This will be discussed in class.
 :END:
-#+begin_info
-Your answer goes here.
-#+end_info
+#+begin_src elisp
+(to-base-27 123)
+#+end_src
+
+#+results:
+: DO
+
+#+begin_src elisp
+(from-base-27 "AB")
+#+end_src
+
+#+results:
+: 783
+
+#+begin_src elisp :results output
+(test-rsa "ABC")
+#+end_src
+
+#+results:
+: "ABC"
+: was encoded as 2242 and encrypted as
+: 41178
+: then decrypted as 2242 and decoded as
+: "ABC"
+: successfully.
+
+#+begin_src elisp :results silent
+  (require 'cl) ; for destructuring-bind
+
+  (defun egcd (a b)
+    "Computes the greatest common divisor of a and b recursively.
+     This extended version returns a list of d, x and y, where
+     d = ax + by = gcd(a, b)."
+    (if (zerop b)
+        (list a 1 0)
+      (destructuring-bind (d x y) (egcd b (% a b))
+        (list d y (- x (* (/ a b) y))))))
+
+  (defun find-TUMMI (o m)
+    (destructuring-bind (d x y) (egcd o m)
+      (if (/= 1 d)
+          (error "TUMMI of %d mod %d does not exist" o m)
+        (mod x m))))
+#+end_src
 * Puzzles
   These not-from-the-book puzzles are really GPAOs.
 ** TODO STT
