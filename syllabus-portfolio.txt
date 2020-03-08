@@ -344,7 +344,7 @@ cursor somewhere in it, press the Enter key.
 | # | is an honest and true record of my work in this course so far. | Claim | Grade      |
 |---+----------------------------------------------------------------+-------+------------|
 | # | Signed:  Colten Larsen                                         | B     | B          |
-| # |                                                                |       |            |
+| # |                                                                | B     | B          |
 |---+----------------------------------------------------------------+-------+------------|
 @@html:<br /><br /><br />@@
 @@latex:\pagebreak@@
