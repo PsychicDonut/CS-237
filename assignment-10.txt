@@ -1,0 +1,255 @@
+-*- mode: org -*-
+#+title: Assignment 10
+#+subtitle: STU Trees II
+#+language: en
+#+options: H:4 num:nil toc:nil \n:nil @:t ::t |:t ^:t *:t TeX:t LaTeX:t d:(not "HINT")
+#+startup: entitiespretty showeverything
+#+setupfile: theme-bigblow.setup
+
+:HINT:
+ Click your mouse on the links below, or with your cursor somewhere in them,
+ press the Enter key.
+
+[[elisp:(relocate-file-to-work-folder)][Relocate File to Work Folder]]
+
+[[elisp:(find-file-other-window "generic-instructions.txt")][Read Instructions]]
+
+[[elisp:(browse-url-of-file (org-html-export-to-html))][Export to HTML and Browse]]
+
+[[elisp:(org-clock-report 1)][Insert/Update Clock Summary Report]]
+:END:
+* Exercises
+  Exercise, to be precise:
+** DONE LND
+   CLOSED: [2020-03-12 Thu 09:15]
+#+begin_note
+  Why do 17 characters require 5 bits per character for a fixed-length encoding?
+  What in general is required for /n/ different characters?
+#+end_note
+#+begin_info
+Because if you build a balanced tree from 17 characters then max travel length
+Should be 5.
+#+end_info
+* Problems
+  No optional problems this week.
+** DONE LTI
+   CLOSED: [2020-03-12 Thu 15:40]
+  Use the tree and the code given below to decode the message
+  =00010010000111010111011011010111100110000010111101100011101011110=.
+
+  Best would be to write a =decode= function that has the same signature as
+  =find-leaf= and calls =find-leaf= as a helper function.
+
+  Now decode the longer message
+  =0001001000111001110101110110110101111001100000101111011000111010111100111=
+  and explain the reason for the perhaps surprising result.
+
+#+BEGIN_SRC elisp :results silent
+  (require 'cl)
+
+  (defvar tree
+    '((("n" "t") (("i" "o") (" " ""))) ("e" ("h" "r"))))
+
+  (defun get-value (node)
+    (and (stringp node) node))
+
+  (defun get-left (node)
+    (and (listp node) (first node)))
+
+  (defun get-right (node)
+    (and (listp node) (second node)))
+
+  (defun find-leaf (encoded tree)
+    (if (get-value tree)
+        (cons tree encoded)
+      (let ((first-char (elt encoded 0))
+            (rest-of-encoded (substring encoded 1)))
+        (case first-char
+          (?0 (find-leaf rest-of-encoded (get-left tree)))
+          (?1 (find-leaf rest-of-encoded (get-right tree)))
+          (t "")))))
+#+END_SRC
+#+begin_src elisp :results silent
+  (defun decode (encoded tree)
+    (if (string-blank-p encoded)
+         nil
+        (cons (car (find-leaf encoded tree)) (decode (cdr (find-leaf encoded tree)) tree))))
+#+end_src
+#+begin_src elisp
+(decode  "00010010000111010111011011010111100110000010111101100011101011110" tree)
+#+end_src
+
+#+results:
+| n | e | i | t | h | e | r |   | h | e | r | e |   | n | o | r |   | t | h | e | r | e |
+
+#+begin_src elisp
+(decode "0001001000111001110101110110110101111001100000101111011000111010111100111" tree)
+#+end_src
+
+#+results:
+| n | e | i |   | t | h | e | r |   | h | e | r | e |   | n | o | r |   | t | h | e | r | e |   |
+
+#+begin_info
+I think that there are extra characters in the second string of 0s and 1s strung in the message.
+This will lead the tree to grab extra " " when you do not want them. I also noticed that there is
+an extra space at the end of the list.
+#+end_info
+** DONE YDQ
+   CLOSED: [2020-03-12 Thu 17:12]
+#+begin_note
+  What is the tie-breaking rule used when deciding where to insert into the
+  queue in this Huffman tree construction? Implement this rule in elisp code,
+  and compare it to the one used by [[http://huffman.ooz.ie][this tool]]. Does it matter what tie-breaking
+  rule you use? Why or why not?
+#+end_note
+#+begin_info
+The rule that we discussed in class was all about the order in which you added an element.
+If you created a new element from smaller elements and there was a previous element that
+was placed earlier then your new element goes after that element.
+I think what is happening with the tree in the tool is that they are flipping that rule.
+They add the element before the previously added element.
+#+end_info
+#+begin_src elisp
+ (defun add-after-nth (n lst new)
+  ;; Creates a new list with NEW added after the nth item of LST. Zero-indexed.
+  (cond
+    ((null lst)(list new))
+    ((= n -1) (cons new lst))
+    ((not(minusp n)) (cons (car lst)
+                           (add-after-nth (1- n)(cdr lst) new)))
+    (T (error "Unhandled values."))))
+
+(defun tie-breaker (new-pair pairs)
+   (setq n (position (cdr new-pair) (mapcar 'cdr pairs)))
+   (add-after-nth n pairs new-pair)
+)
+#+end_src
+
+#+results:
+: tie-breaker
+
+#+begin_src elisp
+(tie-breaker '("G" . 0.2) '(("A" . 0.8) ("B" . 0.1) ("C" . 0.12) ("D" . 0.15) ("E" . 0.2) ("F" . 0.35)))
+#+end_src
+
+#+results:
+: ((A . 0.8) (B . 0.1) (C . 0.12) (D . 0.15) (E . 0.2) (G . 0.2) (F . 0.35))
+
+** DONE YTR
+   CLOSED: [2020-03-12 Thu 17:25]
+#+begin_note
+  Construct the Huffman tree for and build the bitstring encoding the string
+  "cookbooknook".
+
+  What is the average number of bits per character with this encoding?
+
+  What is the compression ratio achieved using this tree\rsquo{}s encoding of
+  the string?
+#+end_note
+#+begin_info
+Average number of bits = 2.33333
+Compression ratio = .2222222 or 22.22%
+#+end_info
+** DONE LGO
+   CLOSED: [2020-03-12 Thu 17:30]
+#+begin_note
+  Using the "cookbooknook" encoding, the bitstring =1011001110= decodes into one
+  English word. What word is it?
+#+end_note
+#+begin_info
+KNOOB
+#+end_info
+** DONE YIV
+   CLOSED: [2020-03-24 Tue 08:01]
+  Context from STK (with one minor change in the code):
+
+  We now revisit the problem of representing trees in elisp. The following code
+  shows a possible implementation of a tree node as a symbol, which exploits the
+  versatile structure of a symbol. The symbol’s value is the node’s value —
+  which can be any lisp object. The symbol’s plist (property list) is used for
+  storing the “pointers” to (the symbols of) the left and right children, /and/
+  the parent of that symbol-node. Note that this is specific to binary trees,
+  but the technique can be extended to arbitrary trees.
+
+#+BEGIN_SRC elisp :results silent
+  (require 'cl)
+
+  (defun get-value (node)
+    (and (symbolp node) (symbol-value node)))
+
+  (defun set-value (node new-value)
+    (and (symbolp node) (set node new-value)))
+
+  (defun get-parent (node)
+    (and (symbolp node) (get node :parent)))
+
+  (defun set-parent (node parent)
+    (and (symbolp node) (symbolp parent) (put node :parent parent)))
+
+  (defun get-left (node)
+    (and (symbolp node) (get node :left)))
+
+  (defun set-left (node left)
+    (and (symbolp node) (symbolp left) (put node :left left)))
+
+  (defun get-right (node)
+    (and (symbolp node) (get node :right)))
+
+  (defun set-right (node right)
+    (and (symbolp node) (symbolp right) (put node :right right)))
+
+  (defun try-it-out ()
+    (setq a 1 b 2 c 3)
+    (put 'a :right 'b)
+    (put 'a :left 'c)
+    (put 'c :parent 'a)
+    (put 'b :parent 'a)
+    (list a (symbol-plist 'a)))
+
+  (setq node-counter 0)
+
+  (defun make-node ()
+    (let ((symbol (intern (concat "n" (number-to-string node-counter)))))
+      (set symbol node-counter)
+      (incf node-counter)
+      (setf (symbol-plist symbol) nil)
+      symbol))
+
+  (defun build-tree (height)
+    (let ((root (make-node)))
+      (if (> height 0)
+          (let ((left (build-tree (1- height)))
+                (right (build-tree (1- height))))
+            (set-left root left)
+            (set-right root right)
+            (set-parent left root)
+            (set-parent right root)))
+      root))
+#+END_SRC
+
+   Draw the trees created by calling the =try-it-out= and the =build-tree=
+   functions, the latter called with at least three different height arguments.
+#+begin_src elisp
+(try-it-out)
+#+end_src
+
+#+results:
+| 1 | (:right b :left c) |
+
+#+begin_src elisp :results code
+(setq node-counter 0)
+(build-tree 4)
+#+end_src
+
+#+results:
+#+begin_src elisp
+(symbol-plist 'n2)
+#+end_src
+
+#+results:
+| :left | n3 | :right | n6 | :parent | n1 |
+
+* Puzzles
+  No puzzles again this week. Work on GPAOs instead! (If you have finished all
+  those seen so far, pick one from the endnotes of the book, and describe what
+  you did with it.)

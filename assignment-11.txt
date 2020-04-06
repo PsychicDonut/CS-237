@@ -1,0 +1,222 @@
+-*- mode: org -*-
+#+title: Assignment 11
+#+subtitle: VWX Graphs I
+#+language: en
+#+options: H:4 num:nil toc:nil \n:nil @:t ::t |:t ^:t *:t TeX:t LaTeX:t d:(not "HINT")
+#+startup: entitiespretty showeverything
+#+setupfile: theme-bigblow.setup
+
+:HINT:
+ Click your mouse on the links below, or with your cursor somewhere in them,
+ press the Enter key.
+
+[[elisp:(relocate-file-to-work-folder)][Relocate File to Work Folder]]
+
+[[elisp:(find-file-other-window "generic-instructions.txt")][Read Instructions]]
+
+[[elisp:(browse-url-of-file (org-html-export-to-html))][Export to HTML and Browse]]
+
+[[elisp:(org-clock-report 1)][Insert/Update Clock Summary Report]]
+:END:
+* Exercises
+** DONE HST
+   CLOSED: [2020-03-19 Thu 09:29]
+#+begin_note
+  How does allowing cycles imply the existence of more than one path from one
+  graph node to another?
+#+end_note
+#+begin_info
+If you have a cycle in a graph that means that you will always have multiple paths from that
+node to another becuase you can always sycle back.
+#+end_info
+** DONE HTC
+   CLOSED: [2020-03-19 Thu 09:31]
+#+begin_note
+  Which node in the [[https://rickneff.github.io/metaphors-be-with-you.html#outline-container-org53bfa2d][directed graph in VWF]] (figure 62) represents Abu in the
+  ping-pong tournament he was in?
+#+end_note
+#+begin_info
+Node D
+#+end_info
+** DONE KPS
+   CLOSED: [2020-03-19 Thu 09:32]
+#+begin_note
+  Do some research and figure out where graphs are used in your major, and describe
+  how a knowledge of graph theory can be beneficial to you in the future.
+#+end_note
+#+begin_info
+Within machine learning we use neural networks all of the time. These are directional
+graphs.
+#+end_info
+** DONE KWD
+   CLOSED: [2020-03-20 Fri 19:11]
+#+begin_note
+  What is the degree sequence of a *perfect*, full, complete, level-3 binary tree?
+#+end_note
+#+begin_info
+perfect: [2 2 2 1 1 1 1]
+full: [2 2 1 1 1]
+complete: [2 2 1 1 1 1]
+#+end_info
+** DONE KOV
+   CLOSED: [2020-03-20 Fri 20:36]
+#+begin_note
+  Choose a link in the directed tournament graph (figure 62 in HTC). Use all of
+  the /directed adjacency/ vocabulary to describe it.
+#+end_note
+#+begin_info
+Let k be the link that comes from A and goes to B.
+A is adjacent to B and B is adjacent from A.
+k conneccts A and B.
+K goes from A to B.
+A is te initia node of k.
+B in the erminal noe of k.
+#+end_info
+** DONE AGA
+   CLOSED: [2020-03-20 Fri 20:37]
+#+begin_note
+  What can you say about /K_0/?
+#+end_note
+#+begin_info
+K_0 is a omplete graph with 0 links and 0 nodes.
+#+end_info
+** DONE KNF
+   CLOSED: [2020-03-24 Tue 08:41]
+#+begin_note
+  What is the degree sequence of the wheel graph W_5? What is it in general for a
+  W_n?
+#+end_note
+#+begin_info
+W_5 = [5,3,3,3,3,3]
+W_n = [n,(n instances of 3)]
+#+end_info
+* Problems
+  Note: * means optional. If it\rsquo{}s not starred, it\rsquo{}s required.
+** TODO KDB *
+#+begin_note
+  List in lisp form all the simple paths (in both representations) from =MT= to
+  =NM=, identifying the shortest path(s) and the longest path(s).
+#+end_note
+#+begin_info
+  Your answer goes here.
+#+end_info
+** TODO ABR *
+#+begin_note
+  Directed graphs (/digraphs/ for short) can represent binary relations. Make a
+  connection between the four relation types and the existence or non-existence
+  of certain features in the graph of the relation.
+
+  - Reflexive = /every/ node has a link that is a loop.
+  - Symmetric = there are /no/ single link arrows (one-way trips) --- every link
+    arrow is a double one (roundtrip).
+  - Antisymmetric = there is /no/ double arrow (going both ways) /unless/ it is
+    a loop.
+  - Transitive = there is /no/ two-leg journey (think flight with a layover)
+    without a shortcut (non-stop flight).
+
+  It is helpful to draw a graph of a relation that is described more abstractly.
+  For an example of an abstract description, here is the relation on the set [1
+  2 3] given by this vector of \ldquo{}conses\rdquo (another way to say /dotted pairs/)
+  representing the ordered pairs:
+
+  [(1 . 1) (1 . 2) (2 . 2) (3 . 3)]
+
+  The three-node four-link graph of that relation appears in [[https://rickneff.github.io/metaphors-be-with-you.html#outline-container-org53bfa2d][section VWF]].
+
+  Identify which features listed above this graph has. Draw the digraphs of some
+  other abstract binary relations, with and without the four features.
+#+end_note
+#+begin_info
+  Your answer goes here.
+#+end_info
+** DONE HRR
+   CLOSED: [2020-03-26 Thu 09:40]
+#+begin_note
+  In another multigraph example, what is the connection between [the \ldquo{}four nodes
+  seven links\rdquo] graph and the \ldquo{}birth of graph theory\rdquo?
+
+  What do its nodes and links represent? What is its degree sequence?
+
+  Explore the graph property \ldquo{}Eulerian\rdquo. Does this graph have it? Describe
+  necessary and sufficient conditions for a graph to be Eulerian.
+#+end_note
+#+begin_info
+It is simalar because there are loops in the graph.
+degree sequence = [5 3 3 3]
+The birth of graph theroy does not represent eulerian properties because it is not a closed
+loop, or has a tail. The other graph does not have any sort of tail.
+#+end_info
+** DONE KEO
+   CLOSED: [2020-03-26 Thu 09:41]
+#+begin_note
+  Explore the question: Does a graph\rsquo{}s degree sequence alone contain enough
+  information to reconstruct the graph?
+#+end_note
+#+begin_info
+No, if you were to look at the degree sequene [1 1 1 1 1] how do you know
+whih node connects to which one.
+#+end_info
+** DONE HMO
+   CLOSED: [2020-03-26 Thu 09:45]
+#+begin_note
+  Draw the graphs of these ten 2d degree sequences:
+
+  | 1 |   |   |   | 2 | 2 |   |   | 2 | 2 |   |   | 1 | 1 |
+  |   |   |   |   |   |   |   |   |   |   |   |   | 4 |   |
+  | 2 | 1 |   |   | 2 | 2 |   |   | 2 | 2 |   |   | 1 | 1 |
+  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+  | 2 | 2 |   |   | 1 | 3 | 1 |   |   |   |   |   |   |   |
+  | 3 | 3 |   |   |   |   |   |   |   |   |   |   |   |   |
+  | 1 | 1 |   |   |   | 1 |   |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+  | 1 |   | 1 |   |   | 2 | 2 |   |   | 1 | 1 |   |   | 1 |
+  |   | 3 |   |   |   |   |   |   |   |   |   |   |   | 1 |
+  |   | 1 |   |   |   | 2 | 2 |   |   | 2 | 2 |   |   | 0 |
+#+end_note
+[[file:2.jpg]]
+** TODO HIJ *
+#+begin_note
+   Why is that? Give a succinct argument justifying that the degrees of all the
+   nodes add up to twice the number of links.
+:HINT:
+ - Hint :: What does /handshaking/ signify?
+:END:
+#+end_note
+#+begin_info
+  Your answer goes here.
+#+end_info
+** TODO KLE *
+#+begin_note
+  Investigate this *corollary* (immediately inferable follow-on theorem) to the
+  handshaking theorem:
+
+  /Any undirected graph has an even number of nodes of odd degree./
+#+end_note
+#+begin_info
+  Your answer goes here.
+#+end_info
+** DONE HAB
+   CLOSED: [2020-03-26 Thu 09:47]
+#+begin_note
+  Is there (can there exist) a simple graph with degree sequence =[3 2 1 0]=?
+  Justify your answer.
+#+end_note
+#+begin_info
+No it can not. If you look at the node with 3 connections there are only 2 other
+node with avalible connections. You would have to connect it to itself.
+#+end_info
+** TODO HBT *
+#+begin_note
+  List in lisp form (using the shorter representation) all the directed paths in
+  the tournament graph from node =A= to node =F=. How many of these paths
+  include node =G=?
+#+end_note
+#+begin_info
+  Your answer goes here.
+#+end_info
+* Puzzles
+  No puzzles again this week. Work on GPAOs instead! (If you have finished all
+  those seen so far, pick one from the endnotes of the book, and describe what
+  you did with it.)
